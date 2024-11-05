@@ -1,25 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+type Point = {
+  x:number,
+  y:number
+}
 function App() {
+  const [cur,setCur] = React.useState<Point[]>([]);
+  const [popped,setPopped] = React.useState<Point[]>([]);
+  function handlePlaceCircle(e:React.MouseEvent<HTMLDivElement>){
+    const {clientX , clientY} = e;
+    setCur([...cur, {x:clientX, y:clientY}]);
+  }
+  function handleUndo(){
+    let newCur = [...cur];
+    let element: Point | undefined = newCur.pop()
+    if (element){
+      setPopped([...popped, element]);
+      setCur(newCur);
+    }
+  }
+  function handleRedo(){
+    let newpopped = [...popped];
+    let element: Point | undefined = newpopped.pop();
+    if (element){
+      setCur([...cur,element]);
+      setPopped(newpopped);
+    }
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="App" onClick={handlePlaceCircle}>
+        {cur.map((p)=>(<div className="point" style={{left: p.x, top: p.y}}></div>))}
+      </div>
+      <button onClick={handleUndo} className="buttons">Undo</button>
+      <button onClick={handleRedo} className="buttons">Redo</button>
+    </>
   );
 }
 
