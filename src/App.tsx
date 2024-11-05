@@ -33,8 +33,8 @@ function App() {
       <div className="App" onClick={handlePlaceCircle}>
         {cur.map((p)=>(<div className="point" style={{left: p.x, top: p.y}}></div>))}
       </div>
-      <button onClick={handleUndo} className="buttons">Undo</button>
-      <button onClick={handleRedo} className="buttons">Redo</button>
+      <button disabled={cur.length===0} onClick={handleUndo} className="buttons">Undo</button>
+      <button disabled = {popped.length===0} onClick={handleRedo} className="buttons">Redo</button>
     </>
   );
 }
